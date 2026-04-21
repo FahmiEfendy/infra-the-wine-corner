@@ -1,0 +1,10 @@
+# Docker files
+.DS_Store
+*.log
+
+# Sensitive Files (Do not commit real production envs)
+.env.prod
+.env.local
+
+# Database Data (If you mount it locally instead of named volume)
+# mysql_data/

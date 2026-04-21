@@ -1,0 +1,30 @@
+services:
+
+  # Backend Application Service
+  app:
+    build: ../be-the-wine-corner
+    restart: always
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ../be-the-wine-corner/.env.prod
+    depends_on:
+      - db
+    volumes:
+      - ../be-the-wine-corner/uploads:/usr/src/app/uploads # Persist uploaded images
+
+  # MySQL Database Service
+  db:
+    image: mysql:8.0
+    restart: always
+    env_file:
+      - ../be-the-wine-corner/.env.prod
+    ports:
+      - "3307:3306" # Maps container 3306 to host 3307 to avoid local conflict
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
