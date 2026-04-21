@@ -1,7 +1,16 @@
 services:
 
+  # Frontend Application Service
+  twc-fe:
+    build: ../fe-the-wine-corner
+    restart: always
+    ports:
+      - "3001:80"
+    depends_on:
+      - twc-be
+
   # Backend Application Service
-  app:
+  twc-be:
     build: ../be-the-wine-corner
     restart: always
     ports:
@@ -11,12 +20,12 @@ services:
     env_file:
       - ../be-the-wine-corner/.env.prod
     depends_on:
-      - db
+      - twc-db
     volumes:
       - ../be-the-wine-corner/uploads:/usr/src/app/uploads # Persist uploaded images
 
   # MySQL Database Service
-  db:
+  twc-db:
     image: mysql:8.0
     restart: always
     env_file:
@@ -25,6 +34,18 @@ services:
       - "3307:3306" # Maps container 3306 to host 3307 to avoid local conflict
     volumes:
       - mysql_data:/var/lib/mysql
+
+  # Nginx Gateway (Reverse Proxy)
+  twc-nginx:
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - twc-fe
+      - twc-be
 
 volumes:
   mysql_data:
