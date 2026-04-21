@@ -2,6 +2,7 @@ services:
 
   # Frontend Application Service
   twc-fe:
+    container_name: twc-fe
     build: ../fe-the-wine-corner
     restart: always
     ports:
@@ -11,6 +12,7 @@ services:
 
   # Backend Application Service
   twc-be:
+    container_name: twc-be
     build: ../be-the-wine-corner
     restart: always
     ports:
@@ -26,6 +28,7 @@ services:
 
   # MySQL Database Service
   twc-db:
+    container_name: twc-db
     image: mysql:8.0
     restart: always
     env_file:
@@ -37,6 +40,7 @@ services:
 
   # Nginx Gateway (Reverse Proxy)
   twc-nginx:
+    container_name: twc-nginx
     image: nginx:stable-alpine
     restart: always
     ports:
